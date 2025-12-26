@@ -1,5 +1,35 @@
+export type MockDB = {
+  me: MeResponse;
+  kpis: HomeKPIs;
+  products: Product[];
+  customers: Customer[];
+  suppliers: Supplier[];
+  purchaseOrders: PurchaseOrder[];
+  sales: Sale[];
+  invoices: Invoice[];
+  expenses: Expense[];
+};
+
 export type Id = string;
 
+export type MeResponse = {
+  id: string; // UUID
+  email: string;
+  first_name: string;
+  last_name: string;
+  role: string;
+  permissions?: string[];
+};
+
+export type HomeKPIs = {
+  todaySales: number;
+  cashCollected: number;
+  lowStockCount: number;
+  unpaidBalances: number;
+};
+
+export type PurchaseOrderStatus = "draft" | "ordered" | "partially_received" | "received" | "cancelled";
+export type SaleStatus = "completed" | "pending_payment" | "paid" | "pending";
 export type Product = {
   id: number;
   sku: string;
@@ -32,7 +62,7 @@ export type Sale = {
   total_amount: number;
   amount_paid: number;
   balance_due: number;
-  status: "paid" | "pending";
+  status: SaleStatus;
 };
 
 export type PurchaseOrder = {
@@ -42,15 +72,20 @@ export type PurchaseOrder = {
   created_at: string;
   expected_delivery?: string;
   total_amount: number;
-  status: "draft" | "ordered" | "partially_received" | "received";
+  status: PurchaseOrderStatus;
+
+  updated_at?: string;
 };
 
 export type Supplier = {
   id: number;
   name: string;
-  phone?: string;
+  contact_person?: string;
   email?: string;
+  phone?: string;
   address?: string;
+  created_at?: string;
+  updated_at?: string;
 };
 
 export type Invoice = {
@@ -73,7 +108,7 @@ export type Expense = {
   receipt_url?: string;
 };
 
-export const mock = {
+export const mock: MockDB = {
   me: {
     id: "00000000-0000-0000-0000-000000000000",
     email: "demo@bizhelm.app",

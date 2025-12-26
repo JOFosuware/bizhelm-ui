@@ -11,35 +11,69 @@ export default async function InvoicesPage() {
     <div className="space-y-4">
       <PageHeader title="Invoices" subtitle="Create invoices, send to customers, and track payments." actionLabel="New invoice" actionHref="#" />
 
-      <div className="rounded-2xl border border-slate-200 bg-white">
-        <Table>
-          <THead>
-            <TR>
-              <TH>Invoice #</TH>
-              <TH>Customer</TH>
-              <TH>Issue date</TH>
-              <TH>Due date</TH>
-              <TH className="text-right">Total</TH>
-              <TH className="text-right">Status</TH>
-            </TR>
-          </THead>
-          <TBody>
-            {invoices.map((inv) => (
-              <TR key={inv.id}>
-                <TD><Link className="font-medium hover:underline" href={`/invoices/${inv.id}`}>{inv.invoice_number}</Link></TD>
-                <TD>{inv.customer_name}</TD>
-                <TD>{fmtDate(inv.issue_date)}</TD>
-                <TD>{fmtDate(inv.due_date)}</TD>
-                <TD className="text-right">{fmtCurrency(inv.total_amount)}</TD>
-                <TD className="text-right">
-                  <Badge variant={inv.status === "paid" ? "success" : inv.status === "overdue" ? "danger" : "secondary"}>{inv.status}</Badge>
-                </TD>
-              </TR>
-            ))}
-            {invoices.length === 0 ? <TR><TD colSpan={6} className="text-center text-slate-500">No invoices.</TD></TR> : null}
-          </TBody>
-        </Table>
+            <div className="rounded-2xl border border-slate-200 bg-white">
+        {/* Mobile cards */}
+        <div className="divide-y divide-slate-100 md:hidden">
+          {invoices.map((inv) => (
+            <Link key={inv.id} href={`/invoices/${inv.id}`} className="block p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="truncate text-sm font-semibold text-slate-900">{inv.invoice_number}</div>
+                  <div className="mt-0.5 truncate text-xs text-slate-500">
+                    {fmtDate(inv.issue_date)}{inv.customer_name ? ` • ${inv.customer_name}` : ""}
+                  </div>
+                </div>
+                <Badge variant={inv.status === "overdue" ? "danger" : inv.status === "paid" ? "success" : "info"}>
+                  {inv.status}
+                </Badge>
+              </div>
+
+              <div className="mt-3 grid grid-cols-2 gap-3 text-xs text-slate-600">
+                <div className="rounded-xl bg-slate-50 p-3">
+                  <div className="text-[11px] text-slate-500">Total</div>
+                  <div className="mt-0.5 font-semibold text-slate-900">{fmtCurrency(inv.total_amount)}</div>
+                </div>
+                <div className="rounded-xl bg-slate-50 p-3">
+                  <div className="text-[11px] text-slate-500">Due</div>
+                  <div className="mt-0.5 font-semibold text-slate-900">{inv.due_date ? fmtDate(inv.due_date) : "—"}</div>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* Desktop table */}
+        <div className="hidden md:block">
+          <Table>
+                    <THead>
+                      <TR>
+                        <TH>Invoice #</TH>
+                        <TH>Customer</TH>
+                        <TH>Issue date</TH>
+                        <TH>Due date</TH>
+                        <TH className="text-right">Total</TH>
+                        <TH className="text-right">Status</TH>
+                      </TR>
+                    </THead>
+                    <TBody>
+                      {invoices.map((inv) => (
+                        <TR key={inv.id}>
+                          <TD><Link className="font-medium hover:underline" href={`/invoices/${inv.id}`}>{inv.invoice_number}</Link></TD>
+                          <TD>{inv.customer_name}</TD>
+                          <TD>{fmtDate(inv.issue_date)}</TD>
+                          <TD>{fmtDate(inv.due_date)}</TD>
+                          <TD className="text-right">{fmtCurrency(inv.total_amount)}</TD>
+                          <TD className="text-right">
+                            <Badge variant={inv.status === "paid" ? "success" : inv.status === "overdue" ? "danger" : "secondary"}>{inv.status}</Badge>
+                          </TD>
+                        </TR>
+                      ))}
+                      {invoices.length === 0 ? <TR><TD colSpan={6} className="text-center text-slate-500">No invoices.</TD></TR> : null}
+                    </TBody>
+                  </Table>
+        </div>
       </div>
     </div>
+
   );
 }

@@ -83,29 +83,49 @@ export default async function HomePage() {
             <Link href="/sales" className="text-sm text-slate-900 hover:underline">View all</Link>
           </div>
 
-          <Table>
-            <THead>
-              <TR>
-                <TH>Sale #</TH>
-                <TH>Date</TH>
-                <TH>Customer</TH>
-                <TH className="text-right">Balance</TH>
-              </TR>
-            </THead>
-            <TBody>
-              {data.unpaidSales.slice(0, 5).map((s) => (
-                <TR key={s.id}>
-                  <TD><Link className="font-medium hover:underline" href={`/sales/${s.id}`}>{s.sale_number}</Link></TD>
-                  <TD>{fmtDate(s.sale_date)}</TD>
-                  <TD>{s.customer_name || "—"}</TD>
-                  <TD className="text-right">{fmtCurrency(s.balance_due)}</TD>
-                </TR>
-              ))}
-              {data.unpaidSales.length === 0 ? (
-                <TR><TD colSpan={4} className="text-center text-slate-500">No unpaid sales right now.</TD></TR>
-              ) : null}
-            </TBody>
-          </Table>
+          {/* Mobile list */}
+<div className="divide-y divide-slate-100 md:hidden">
+  {data.unpaidSales.slice(0, 5).map((s) => (
+    <Link key={s.id} href={`/sales/${s.id}`} className="block py-3">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="truncate text-sm font-semibold text-slate-900">{s.sale_number}</div>
+          <div className="mt-0.5 truncate text-xs text-slate-500">
+            {fmtDate(s.sale_date)}{s.customer_name ? ` • ${s.customer_name}` : ""}
+          </div>
+        </div>
+        <div className="text-sm font-semibold text-slate-900">{fmtCurrency(s.balance_due)}</div>
+      </div>
+    </Link>
+  ))}
+</div>
+
+{/* Desktop table */}
+<div className="hidden md:block">
+            <Table>
+                        <THead>
+                          <TR>
+                            <TH>Sale #</TH>
+                            <TH>Date</TH>
+                            <TH>Customer</TH>
+                            <TH className="text-right">Balance</TH>
+                          </TR>
+                        </THead>
+                        <TBody>
+                          {data.unpaidSales.slice(0, 5).map((s) => (
+                            <TR key={s.id}>
+                              <TD><Link className="font-medium hover:underline" href={`/sales/${s.id}`}>{s.sale_number}</Link></TD>
+                              <TD>{fmtDate(s.sale_date)}</TD>
+                              <TD>{s.customer_name || "—"}</TD>
+                              <TD className="text-right">{fmtCurrency(s.balance_due)}</TD>
+                            </TR>
+                          ))}
+                          {data.unpaidSales.length === 0 ? (
+                            <TR><TD colSpan={4} className="text-center text-slate-500">No unpaid sales right now.</TD></TR>
+                          ) : null}
+                        </TBody>
+                      </Table>
+          </div>
         </CardContent>
       </Card>
     </div>

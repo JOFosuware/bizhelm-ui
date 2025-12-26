@@ -140,7 +140,7 @@ self.__SERVER_FILES_MANIFEST={
       "isExperimentalCompile": false
     }
   },
-  "appDir": "/home/jofosuware/Projects/bizhelm-ui",
+  "appDir": "/home/jofosuware/Projects/bizhelm-ui-test",
   "relativeAppDir": "",
   "files": [
     ".next/routes-manifest.json",

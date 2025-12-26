@@ -1,5 +1,16 @@
 import { bhFetch } from "@/lib/api";
-import { mock, type Customer, type Expense, type Invoice, type Product, type PurchaseOrder, type Sale, type Supplier } from "@/lib/mock";
+import {
+  mock,
+  type Customer,
+  type Expense,
+  type Invoice,
+  type MeResponse,
+  type HomeKPIs,
+  type Product,
+  type PurchaseOrder,
+  type Sale,
+  type Supplier,
+} from "@/lib/mock";
 
 export const useMock = () => process.env.NEXT_PUBLIC_MOCK_MODE === "true";
 
@@ -7,12 +18,12 @@ function safe<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
   return fn().catch(() => fallback);
 }
 
-export async function getMe() {
+export async function getMe(): Promise<MeResponse> {
   if (useMock()) return mock.me;
   return safe(() => bhFetch("/auth/me"), mock.me as any);
 }
 
-export async function getHome() {
+export async function getHome(): Promise<{ kpis: HomeKPIs; lowStock: Product[]; unpaidSales: Sale[]; openPOs: PurchaseOrder[]; overdueInvoices: Invoice[] }> {
   if (useMock()) {
     const lowStock = mock.products.filter(p => p.units <= p.reorder_level);
     return {
@@ -64,7 +75,8 @@ export async function listCustomers(query?: string): Promise<Customer[]> {
   if (useMock()) {
     const q = (query || "").toLowerCase();
     return mock.customers.filter(c => {
-      const name = (c.type === "business" ? c.company_name : `${c.first_name || ""} ${c.last_name || ""}`).toLowerCase();
+      if (!c) return false;
+      const name = (c.type === "business" ? (c.company_name || "") : `${c.first_name || ""} ${c.last_name || ""}`).toLowerCase();
       return !q || name.includes(q) || (c.email || "").toLowerCase().includes(q) || (c.phone || "").toLowerCase().includes(q);
     });
   }

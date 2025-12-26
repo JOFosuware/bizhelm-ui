@@ -21,31 +21,50 @@ export default async function SuppliersPage({
         <Input name="q" defaultValue={q} placeholder="Search suppliers…" />
       </form>
 
-      <div className="rounded-2xl border border-slate-200 bg-white">
-        <Table>
-          <THead>
-            <TR>
-              <TH>Supplier</TH>
-              <TH>Phone</TH>
-              <TH>Email</TH>
-              <TH>Address</TH>
-            </TR>
-          </THead>
-          <TBody>
-            {suppliers.map((s) => (
-              <TR key={s.id}>
-                <TD><Link className="font-medium hover:underline" href={`/suppliers/${s.id}`}>{s.name}</Link></TD>
-                <TD>{s.phone || "—"}</TD>
-                <TD>{s.email || "—"}</TD>
-                <TD>{s.address || "—"}</TD>
-              </TR>
-            ))}
-            {suppliers.length === 0 ? (
-              <TR><TD colSpan={4} className="text-center text-slate-500">No suppliers found.</TD></TR>
-            ) : null}
-          </TBody>
-        </Table>
+            <div className="rounded-2xl border border-slate-200 bg-white">
+        {/* Mobile cards */}
+        <div className="divide-y divide-slate-100 md:hidden">
+          {suppliers.map((sp) => (
+            <Link key={sp.id} href={`/suppliers/${sp.id}`} className="block p-4">
+              <div className="min-w-0">
+                <div className="truncate text-sm font-semibold text-slate-900">{sp.name}</div>
+                <div className="mt-0.5 truncate text-xs text-slate-500">
+                  {sp.contact_person || "—"}{sp.phone ? ` • ${sp.phone}` : ""}{sp.email ? ` • ${sp.email}` : ""}
+                </div>
+              </div>
+              {sp.address ? <div className="mt-2 line-clamp-2 text-xs text-slate-600">{sp.address}</div> : null}
+            </Link>
+          ))}
+        </div>
+
+        {/* Desktop table */}
+        <div className="hidden md:block">
+          <Table>
+                    <THead>
+                      <TR>
+                        <TH>Supplier</TH>
+                        <TH>Phone</TH>
+                        <TH>Email</TH>
+                        <TH>Address</TH>
+                      </TR>
+                    </THead>
+                    <TBody>
+                      {suppliers.map((s) => (
+                        <TR key={s.id}>
+                          <TD><Link className="font-medium hover:underline" href={`/suppliers/${s.id}`}>{s.name}</Link></TD>
+                          <TD>{s.phone || "—"}</TD>
+                          <TD>{s.email || "—"}</TD>
+                          <TD>{s.address || "—"}</TD>
+                        </TR>
+                      ))}
+                      {suppliers.length === 0 ? (
+                        <TR><TD colSpan={4} className="text-center text-slate-500">No suppliers found.</TD></TR>
+                      ) : null}
+                    </TBody>
+                  </Table>
+        </div>
       </div>
     </div>
+
   );
 }

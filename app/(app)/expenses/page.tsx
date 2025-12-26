@@ -10,33 +10,55 @@ export default async function ExpensesPage() {
     <div className="space-y-4">
       <PageHeader title="Expenses" subtitle="Track spending and attach receipts for audit trails." actionLabel="Add expense" actionHref="#" />
 
-      <div className="rounded-2xl border border-slate-200 bg-white">
-        <Table>
-          <THead>
-            <TR>
-              <TH>Date</TH>
-              <TH>Category</TH>
-              <TH>Vendor</TH>
-              <TH>Description</TH>
-              <TH className="text-right">Amount</TH>
-              <TH className="text-right">Receipt</TH>
-            </TR>
-          </THead>
-          <TBody>
-            {expenses.map((e) => (
-              <TR key={e.id}>
-                <TD>{fmtDate(e.expense_date)}</TD>
-                <TD><Badge variant="secondary">{e.category}</Badge></TD>
-                <TD>{e.vendor || "—"}</TD>
-                <TD>{e.description}</TD>
-                <TD className="text-right">{fmtCurrency(e.amount)}</TD>
-                <TD className="text-right">{e.receipt_url ? "View" : "—"}</TD>
-              </TR>
-            ))}
-            {expenses.length === 0 ? <TR><TD colSpan={6} className="text-center text-slate-500">No expenses.</TD></TR> : null}
-          </TBody>
-        </Table>
+            <div className="rounded-2xl border border-slate-200 bg-white">
+        {/* Mobile cards */}
+        <div className="divide-y divide-slate-100 md:hidden">
+          {expenses.map((ex) => (
+            <div key={ex.id} className="p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="truncate text-sm font-semibold text-slate-900">{ex.description || ex.category}</div>
+                  <div className="mt-0.5 truncate text-xs text-slate-500">{fmtDate(ex.expense_date)} • {ex.category}</div>
+                </div>
+                <div className="text-sm font-semibold text-slate-900">{fmtCurrency(ex.amount)}</div>
+              </div>
+              <div className="mt-2">
+                <Badge variant="info">{ex.category}</Badge>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop table */}
+        <div className="hidden md:block">
+          <Table>
+                    <THead>
+                      <TR>
+                        <TH>Date</TH>
+                        <TH>Category</TH>
+                        <TH>Vendor</TH>
+                        <TH>Description</TH>
+                        <TH className="text-right">Amount</TH>
+                        <TH className="text-right">Receipt</TH>
+                      </TR>
+                    </THead>
+                    <TBody>
+                      {expenses.map((e) => (
+                        <TR key={e.id}>
+                          <TD>{fmtDate(e.expense_date)}</TD>
+                          <TD><Badge variant="secondary">{e.category}</Badge></TD>
+                          <TD>{e.vendor || "—"}</TD>
+                          <TD>{e.description}</TD>
+                          <TD className="text-right">{fmtCurrency(e.amount)}</TD>
+                          <TD className="text-right">{e.receipt_url ? "View" : "—"}</TD>
+                        </TR>
+                      ))}
+                      {expenses.length === 0 ? <TR><TD colSpan={6} className="text-center text-slate-500">No expenses.</TD></TR> : null}
+                    </TBody>
+                  </Table>
+        </div>
       </div>
     </div>
+
   );
 }
