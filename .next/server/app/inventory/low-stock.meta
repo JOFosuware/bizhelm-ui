@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(app)/layout,_N_T_/(app)/inventory/layout,_N_T_/(app)/inventory/low-stock/layout,_N_T_/(app)/inventory/low-stock/page,_N_T_/inventory/low-stock"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/!KGFwcCk/inventory/low-stock/__PAGE__",
+    "/!KGFwcCk/inventory/low-stock",
+    "/!KGFwcCk/inventory",
+    "/!KGFwcCk",
+    "/_index",
+    "/_head"
+  ]
+}
